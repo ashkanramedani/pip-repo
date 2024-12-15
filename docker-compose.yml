@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  pip-repo:
+    build:
+      context: .
+    container_name: pip-repo
+    ports:
+      - "${API_PORT}:5000"
+      
+    restart: always
+    
+    volumes:
+      - ./packages:/usr/src/app/packages
+
+    networks:
+      - ieltsdaily
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pip-repo.rule=Host(`pip-repo`)"
+      - "traefik.http.services.pip-repo.loadbalancer.server.port=${API_PORT}"
